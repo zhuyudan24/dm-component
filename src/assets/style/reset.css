@@ -1,0 +1,299 @@
+/**
+ * Eric Meyer's Reset CSS v2.0 (http://meyerweb.com/eric/tools/css/reset/)
+ * http://cssreset.com
+ */
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video,
+input,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-weight: normal;
+  vertical-align: baseline;
+  font-family:100%;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6{
+  font-size:14px;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+/* custom */
+a {
+  color: #7e8c8d;
+  text-decoration: none;
+  -webkit-backface-visibility: hidden;
+}
+li {
+  list-style: none;
+}
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track-piece {
+  background-color: rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:vertical {
+  height: 5px;
+  background-color: rgba(125, 125, 125, 0.7);
+  -webkit-border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  width: 5px;
+  background-color: rgba(125, 125, 125, 0.7);
+  -webkit-border-radius: 6px;
+}
+html,
+body {
+  width: 100%;
+  /* min-height: 100%;
+  height: 100%; */
+  /*background-color: #ffffff;*/
+  background-color: #fff;
+  box-sizing: border-box;
+  font-family:"PingFangSC";
+}
+body {
+  -webkit-text-size-adjust: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+input:focus {
+  box-shadow: none;
+  outline: none;
+}
+a {
+    color: #5092e1;
+}
+a:hover{
+  color: #1e6cd5;
+}
+.fl{
+  float: left;
+}
+.fr{
+  float: right;
+}
+.el-table th{
+  background: #f1f3f7!important;
+}
+/*tab切换的线条大小*/
+.el-tabs__nav-wrap::after{
+  height:1px!important;
+}
+/*搜索的删除按钮*/
+.el-input .el-input__clear:hover {
+    color: #f25058!important;
+}
+/*自定义表格*/
+  /*表格start*/
+  .brand-table{
+    width:100%;
+    font-size:14px;
+    color:#606266;
+  }
+  .brand-table thead tr{
+    height:48px;
+    line-height:48px;
+    background: #f1f3f7;
+    text-align: left;
+  }
+  .brand-table thead th{
+    padding:0 15px;
+  }
+  .brand-table thead .sort{
+    position: relative;
+    display:inline-block;
+    width:40px;
+  }
+  .brand-table .sort .el-icon-caret-top{
+    position:absolute;
+    top:15px;
+    cursor: pointer;
+    color:#c0c4ce;
+  }
+  .brand-table .sort .el-icon-caret-bottom{
+    position: absolute;
+    top:22px;
+    cursor: pointer;
+    color:#c0c4ce;
+  }
+  .brand-table .sort .grayColor{
+    color:#606266;
+  }
+  .brand-table thead .el-icon-question{
+    color:#c0c4ce;
+    cursor: pointer;
+    font-size:14px;
+  }
+    .brand-table thead .el-icon-question:hover{
+    color:#909399;
+  }
+  .brand-table tbody tr{
+    border-bottom:1px solid #ebeef5;
+  }
+  .brand-table tbody td{
+    padding:20px 15px;
+    vertical-align: middle;
+  }
+  .brand-table .operate a{
+    margin-right:15px;
+  }
+  .brand-table .icon-move i{
+      font-size:22px;
+      cursor: pointer;
+  }
+  .brand-table tbody tr:first-child .el-icon-upload2{
+      color:#e6e6e6;
+      cursor:not-allowed;
+  }
+  .brand-table tbody tr:first-child .icon-up{
+      color:#e6e6e6;
+      cursor:not-allowed;
+  }
+  .brand-table tbody tr:last-child .icon-down{
+      color:#e6e6e6;
+      cursor:not-allowed;
+  }
+  .brand-table tbody tr:last-child .el-icon-download{
+      color:#e6e6e6;
+      cursor:not-allowed;
+  }
+  .icon-arrowdown:before{
+    font-size:19px;
+    vertical-align: top;
+  }
+  .icon-up:before{
+    display:inline-block;
+    transform: rotate(180deg);
+    font-size:19px;
+    vertical-align: top;
+  }
+  /*表格end*/
+/*数据为空*/
+.table-list-null{
+  text-align: center;
+  /*min-height:200px;*/
+  margin:70px 0;
+}
+.table-list-null i{
+  color:#a3adb6;
+  font-size:30px;
+}
+.table-list-null  p{
+  font-size: 14px;
+  color: #a3adb6;
+  margin:14px 0;
+}

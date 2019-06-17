@@ -1,0 +1,131 @@
+{
+  "gic": {
+    "store": {
+      "version": "2.0.01",
+      "name": "门店弹窗",
+      "adminName" : "石瑶"
+    },
+    "store-new": {
+      "version": "2.0.11",
+      "name": "新版门店选择器",
+      "adminName" : "石瑶"
+    },
+    "store-group": {
+      "version": "2.0.06",
+      "name": "新版集团门店选择器",
+      "adminName" : "石瑶"
+    },
+    "store-card": {
+      "version": "2.0.02",
+      "name": "新版卡券门店选择器",
+      "adminName" : "石瑶"
+    },
+    "card": {
+      "version": "2.0.03",
+      "name": "卡券弹窗",
+      "adminName" : "朱玉丹"
+    },
+    "header": {
+      "version": "2.0.20",
+      "name": "头部组件",
+      "adminName" : "朱玉丹"
+    },
+    "footer": {
+      "version": "2.0.02",
+      "name": "底部组件",
+      "adminName" : "朱玉丹"
+    },
+    "aside-menu": {
+      "version": "2.0.02",
+      "name": "左侧菜单组件",
+      "adminName" : "杜梦鸽"
+    },
+    "people": {
+      "version": "2.0.16",
+      "name": "人群筛选器",
+      "adminName" : "石瑶"
+    },
+    "group-people": {
+      "version": "2.0.11",
+      "name": "集团人群筛选器",
+      "adminName" : "石瑶"
+    },
+    "confirm-people": {
+      "version": "2.0.01",
+      "name": "指定会员筛选器",
+      "adminName" : "--"
+    },
+    "img-preview": {
+      "version": "2.0.00",
+      "name": "单个图片预览",
+      "adminName" : "朱玉丹"
+    },
+    "member-group": {
+      "version": "2.0.01",
+      "name": "会员分组",
+      "adminName" : "岳和青"
+    },
+    "space": {
+      "version": "2.0.01",
+      "name": "图片空间上传文件夹",
+      "adminName" : "石瑶"
+    },
+    "upload-image": {
+      "version": "2.0.04",
+      "name": "图片墙上传",
+      "adminName" : "杜梦鸽"
+    },
+    "export-excel": {
+      "version": "2.0.04",
+      "name": "导出数据",
+      "adminName" : "朱玉丹"
+    },
+    "marketing-event": {
+      "version": "2.0.00",
+      "name": "营销事件",
+      "adminName" : "--"
+    },
+    "area-ab": {
+      "version": "2.0.00",
+      "name": "省市县选择",
+      "adminName" : "岳和青"
+    },
+    "selector": {
+      "version": "1.1.22",
+      "name": "商品选择器",
+      "adminName" : "石瑶"
+    },
+    "member-info": {
+      "version": "1.0.01",
+      "name": "会员详情弹框",
+      "adminName" : "杜梦歌"
+    }
+  },
+  "base": {
+    "input": {
+      "version": "2.0.00",
+      "name": "输入框",
+      "adminName" : "石瑶"
+    },
+    "delete": {
+      "version": "2.0.00",
+      "name": "删除轻弹窗",
+      "adminName" : "石瑶"
+    },
+    "form-item": {
+      "version": "2.0.00",
+      "name": "表单Item带提示",
+      "adminName" : "石瑶"
+    },
+    "datepicker": {
+      "version": "2.0.00",
+      "name": "日历年月",
+      "adminName" : "石瑶"
+    },
+    "table": {
+      "version": "2.0.00",
+      "name": "表格",
+      "adminName" : "石瑶"
+    }
+  }
+}

@@ -1,0 +1,293 @@
+/* reset样式 */
+.fz0 {
+  font-size: 0;
+}
+.w100 {
+    width: 100px;
+}
+
+.w200 {
+    width: 200px;
+}
+
+.mr5 {
+    margin-right: 5px;
+}
+
+.w240 {
+    width: 240px!important;
+}
+
+.vertical-middle {
+    vertical-align: middle;
+}
+
+.vertical-baseline {
+    vertical-align: baseline;
+}
+
+.inline-block {
+    vertical-align: middle;
+    display: inline-block!important;
+}
+
+.block {
+    display: block!important;
+}
+
+.gray-color {
+    color: #909399;
+}
+
+.fz13 {
+    font-size: 13px;
+}
+
+.fz12 {
+    font-size: 12px;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+.clearfix:after {
+    display: block;
+    clear: both;
+    content: '';
+    visibility: hidden;
+    height: 0;
+}
+
+.clearfix {
+    zoom: 1;
+}
+
+.vertical-middle {
+    vertical-align: middle;
+}
+
+.block {
+    display: block;
+    overflow: hidden;
+}
+
+
+/* reset样式end */
+
+
+/* 公共样式START */
+
+.dm-store__btn {
+    text-align: right;
+    height: 18px;
+    line-height: 28px;
+}
+
+.dm-store__btn--border {
+    border-top: 1px solid #E4E7ED;
+}
+
+.dm-store__btn--cancel {
+    font-size: 13px;
+    margin-right: 8px;
+}
+
+
+/*  左右移动的组件 */
+
+.dm-store__wrap {
+    width: 500px;
+    height: 378px;
+    overflow: hidden;
+}
+
+.dm-store__left,
+.dm-store__right {
+    display: inline-block;
+    width: 200px;
+    height: 376px;
+    overflow: hidden;
+    border: 1px solid #E4E7ED;
+    border-radius: 4px;
+    vertical-align: middle;
+    background: #fff;
+}
+
+.dm-store__state {
+    display: flex;
+    justify-content: space-between;
+    background: #F5F7FA;
+    border-bottom: 1px solid #E4E7ED;
+    height: 40px;
+    padding: 0 10px;
+    line-height: 40px;
+    overflow: hidden;
+}
+
+.dm-store__state>* {
+    vertical-align: middle;
+}
+
+.dm-store__search {
+    margin: 10px;
+}
+
+.dm-store__search .el-input__inner {
+    border-radius: 30px;
+}
+
+.dm-store__list {
+    margin: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 284px;
+}
+
+.dm-store__item {
+    height: 34px;
+    display: flex;
+    justify-content: space-between;
+    line-height: 34px;
+    padding: 0 10px;
+}
+.dm-store__item .el-icon-close,.dm-store__item .el-icon-circle-close {
+  color:#909399;
+}
+.dm-store__item .el-icon-arrow-right {
+  color:#c0c4cc;
+}
+
+
+.dm-store__list .el-tree-node__label {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.dm-store__item--52 {
+    height: 52px;
+    line-height: 52px;
+}
+
+.dm-store__item:hover {
+    background: #F5F7FA;
+}
+
+.dm-store__item>i {
+    line-height: 34px;
+}
+
+.dm-store__item--52>i {
+    line-height: 52px;
+}
+
+.dm-store__item .el-checkbox__label {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 136px;
+    overflow: hidden;
+    vertical-align: middle;
+}
+.dm-store__list--more{
+  text-align: center;
+  padding:6px 0;
+}
+
+.dm-store__center {
+    display: inline-block;
+    vertical-align: middle;
+    width: 34px;
+}
+.dm-store__center.dm-store__center--card{
+  width: 78px;
+}
+.dm-store__center .el-button.is-circle {
+  padding: 6px;
+}
+
+
+.dm-store__center .el-button {
+    display: block;
+    margin: 10px auto;
+}
+
+.dm-store__reference {
+    position: relative;
+}
+
+.dm-store__inputtag {
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 0 6px;
+    line-height: 28px;
+    /* font-size: 0px; */
+    vertical-align: middle;
+}
+
+.dm-store__inputtag--tips {
+    padding: 6px;
+    font-size: 14px;
+}
+
+.dm-store__inputtag .el-tag {
+    margin-right: 4px;
+}
+
+.dm-store__inputtag--total {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    background: #fff;
+    border-radius: 4px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 12px;
+    padding: 0 6px;
+}
+
+.dm-store__total--tag {
+    margin: 5px;
+}
+.dm-store__line::after {
+  display: block;
+  content: ' ';
+  height:1px;
+  width:100%;
+  background:#E4E7ED;
+}
+
+
+/*  公共样式END */
+
+.dm-store__area {
+    width: 412px;
+    height: 403px;
+    overflow: hidden;
+}
+
+.dm-store__type__item {
+    display: block;
+    height: 34px;
+    line-height: 34px;
+    padding: 0 10px;
+}
+
+.dm-store__type__item:hover {
+    background: #F5F7FA;
+}
+
+.dm-store__inner {
+    position: relative;
+    vertical-align: middle;
+}
+
+.dm-store__card {
+    width: 490px;
+    height: 378px;
+    overflow: hidden;
+    /* background: #fff; */
+}

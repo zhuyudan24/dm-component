@@ -1,0 +1,68 @@
+body {
+  font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;
+  font-size: 14Px;
+  color: #656b79;
+  background-color: #fff;
+  height: 100%;
+}
+html, body, #docs {
+  height: 100%;
+}
+div {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+body, p, ul, li {
+  margin: 0;
+  padding: 0;
+}
+ul {
+  list-style: none;
+}
+* {
+  outline: none;
+}
+
+@font-face {
+  font-family: 'SFProDisplay-Medium';
+  src: url('../fonts/SF-Pro-Display-Medium.otf');
+}
+@font-face {
+  font-family: 'SFProDisplay-Bold';
+  src: url('../fonts/SF-Pro-Display-Bold.otf');
+}
+
+#app {
+  height:100%;
+}
+.w400 {
+  width: 400px!important;
+}
+.dm-section {
+  margin: 20px;
+  padding: 20px;
+  background: #fff;
+  overflow: hidden;
+}
+.dm-section--title {
+  height: 30px;
+  line-height: 10px;
+  color:#333;
+  font-weight: 500;
+  font-size: 18px!important;
+  border-bottom: 1px solid #dfdfdf;
+  width: 100%;
+  margin-bottom: 20px;
+}
+.dm-section--span {
+  padding-left:20px;
+  font-size: 14px;
+}
+.dm-section--title .el-icon-circle-plus-outline {
+  color: #409EFF;
+  cursor: pointer;
+}
+.dm-section--title .el-icon-remove-outline {
+  color: #409EFF;
+  cursor: pointer;
+}
