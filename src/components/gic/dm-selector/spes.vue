@@ -29,7 +29,8 @@ export default {
         return [];
       }
     },
-    goodsIndex: Array
+    goodsIndex: Array,
+    returnList: Array
   },
 
   data() {
@@ -46,12 +47,24 @@ export default {
       immediate: true,
       handler(val) {
         this.spes = val;
+        if (val.length && this.returnList.length) {
+          this.returnList.forEach(el => {
+            let i = this.spes.findIndex(item => el.standardId == item.standardId);
+            if (i > -1) {
+              this.checkedSpes.push(this.spes[i]);
+            }
+          });
+          let checkedCount = this.checkedSpes.length;
+          this.checkAll = checkedCount === this.spes.length;
+          this.isIndeterminate = checkedCount > 0 && checkedCount < this.spes.length;
+        }
       }
     },
     checkedSpes(newval) {
-      this.dispatch('vue-gic-selector', 'pass-spes', {
+      this.dispatch('vue-gic-goods-selector', 'pass-spes', {
         index: this.goodsIndex,
-        items: newval
+        items: newval,
+        type: 'stdGroup'
       });
     }
   },

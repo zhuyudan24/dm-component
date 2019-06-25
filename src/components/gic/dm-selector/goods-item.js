@@ -20,11 +20,12 @@ export default {
   props: {
     type: {
       type: String,
-      validator: val => ['brand', 'ategory', 'specifications', 'properties', 'some'].includes(val)
+      validator: val => ['brand', 'ategory', 'specifications', 'properties', 'some'].indexOf(val) > -1
     },
     goodsIndex: Array,
     tags: Array,
-    goodsBrands: Array
+    goodsBrands: Array,
+    listReback: [Array, Object]
   },
 
   data() {
@@ -42,7 +43,8 @@ export default {
       props: {
         tags: this.tags,
         'goods-brands': this.goodsBrands,
-        'goods-index': this.goodsIndex
+        'goods-index': this.goodsIndex,
+        'list-reback': this.listReback
       }
     };
 

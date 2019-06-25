@@ -8,6 +8,8 @@ import log from '../docs/log.vue';
 import componentsList from '../../components.json';
 let gic = componentsList.gic;
 let base = componentsList.base;
+let expansion = componentsList.expansion;
+console.log(expansion);
 
 Vue.use(Router);
 
@@ -31,6 +33,18 @@ const baseComponentRoutes = Object.keys(base).map(v => ({
   }
 }));
 
+const expansComponentRoutes = Object.keys(expansion).map(v => ({
+  path: '/expansion/' + v + '.' + expansion[v].version,
+  name: v,
+  // eslint-disable-next-line
+  component: resolve => require([`../views/expansion/${v}.vue`], resolve),
+  meta: {
+    adminName: expansion[v].adminName
+  }
+}));
+
+const finalRoutes = baseComponentRoutes.concat(gicComponentRoutes).concat(expansComponentRoutes);
+
 export default new Router({
   routes: [
     {
@@ -38,7 +52,7 @@ export default new Router({
       name: '',
       component: Home,
       redirect: '/introduction',
-      children: baseComponentRoutes.concat(gicComponentRoutes).concat([
+      children: finalRoutes.concat([
         {
           path: '/introduction',
           name: 'introduction',

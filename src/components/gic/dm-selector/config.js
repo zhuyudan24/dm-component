@@ -1,3 +1,3 @@
 const host = window.location.origin;
 
-export const baseUrl = host.includes('localhost') ? 'http://gicdev.demogic.com' : host;
+export const baseUrl = host.('localhost') ? 'http://gicdev.demogic.com' : host;

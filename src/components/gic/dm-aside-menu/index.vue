@@ -13,13 +13,20 @@
                   <i :class="['iconfont', 'menu-icon', menuItem.iconUrl]"></i>
                   <span slot="title">{{ menuItem.menuName }}</span>
                 </template>
-                <el-menu-item v-for="(childMenu, index) in menuItem.level4List" :key="index" :index="childMenu.menuUrl" style="padding-left: 53px;"
-                  ><label slot="title" :data-index="$route.path == childMenu.menuUrl ? $route.path : false" :data-path="childMenu.menuUrl">{{ childMenu.menuName }}</label></el-menu-item
-                >
+                <el-menu-item v-for="(childMenu, index) in menuItem.level4List" :key="index" :index="childMenu.menuUrl" style="padding-left: 53px;" v-if="menuItem.isRouter === 1">
+                  <label slot="title" :data-index="$route.path == childMenu.menuUrl ? $route.path : false" :data-path="childMenu.menuUrl">{{ childMenu.menuName }}</label>
+                </el-menu-item>
+                <el-menu-item v-for="(childMenu, index) in menuItem.level4List" :key="index" style="padding-left: 53px;color:#fff" v-if="childMenu.isRouter === 0" :index="childMenu.isRouter">
+                  <a class="el-menu-item" :href="childMenu.menuUrl" target="_blank">{{ childMenu.menuName }}</a>
+                </el-menu-item>
               </el-submenu>
-              <el-menu-item :index="menuItem.menuUrl" :key="index" v-if="!menuItem.level4List.length">
+              <el-menu-item :index="menuItem.menuUrl" :key="index" v-if="!menuItem.level4List.length && menuItem.isRouter === 1">
                 <i :class="['iconfont', 'menu-icon', menuItem.iconUrl]"></i>
                 <span slot="title">{{ menuItem.menuName }}</span>
+              </el-menu-item>
+              <el-menu-item :key="index" v-if="!menuItem.level4List.length && menuItem.isRouter === 0" :index="menuItem.isRouter">
+                <i :class="['iconfont', 'menu-icon', menuItem.iconUrl]"></i>
+                <a :href="menuItem.menuUrl" target="_blank" style="color:#fff">{{ menuItem.menuName }}</a>
               </el-menu-item>
             </template>
           </el-menu>
@@ -61,7 +68,9 @@ export default {
     handleSelect(key, keyPath) {
       var that = this;
       log(key, keyPath);
-      that.selectMenu = key;
+      if (key != 0) {
+        that.selectMenu = key;
+      }
     },
 
     // 设置新数据
@@ -73,15 +82,18 @@ export default {
       newData.forEach(function(ele, index) {
         if (ele.level4List == null || ele.level4List.length == 0) {
           // 设置 url
-          ele.menuUrl = '/' + ele.menuUrl;
+          if (ele.isRouter === 1) {
+            ele.menuUrl = '/' + ele.menuUrl;
+          }
         } else {
           ele.level4List.forEach(function(el, key) {
             // 设置 url
-            el.menuUrl = '/' + el.menuUrl;
+            if (ele.isRouter === 1) {
+              el.menuUrl = '/' + el.menuUrl;
+            }
           });
         }
       });
-
       log('处理后的左侧菜单 list:', newData);
       that.menuLeftRouter = newData;
     },

@@ -24,6 +24,7 @@
 </template>
 <script>
 import layout from '../layout.vue';
+import Wave from '../../components/expansion/dm-wave/_util';
 import dmInput from '../../components/base/dm-input/index.vue';
 import MyMarkdown from '../../components/base/dm-input/readme.md';
 
@@ -32,6 +33,7 @@ export default {
   components: {
     layout,
     'dm-input': dmInput,
+    Wave,
     MyMarkdown
   },
   data() {

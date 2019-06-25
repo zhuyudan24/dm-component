@@ -6,7 +6,6 @@
 </template>
 
 <script>
-import { log } from '@/utils/index.js';
 export default {
   name: 'Casitem',
 
@@ -21,21 +20,12 @@ export default {
         `cascader-menu__item`,
         {
           [`cascader-menu__item--extensible`]: this.data && this.data.isChildren,
-          [`is-active`]: this.tmpItem.categoryName === this.data.categoryName
+          [`is-active`]: this.tmpItem.categoryId == this.data.categoryId
         }
       ];
     },
     showArrow() {
       return this.data.isChildren;
-    }
-  },
-
-  watch: {
-    tmpItem(val) {
-      log(val);
-    },
-    data(newval) {
-      log(newval);
     }
   }
 };

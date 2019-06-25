@@ -8,28 +8,32 @@
 
       <!-- 规格类型筛选 -->
       <div class="spe-type">
-        <el-radio v-model="speRadio" v-if="spesGroup" label="1">通过规格值组筛选</el-radio>
-        <el-radio v-model="speRadio" v-if="spesVal" label="2">通过规格值筛选</el-radio>
+        <el-radio v-model="speRadio" label="2">通过规格值筛选</el-radio>
+        <el-radio v-model="speRadio" label="1">通过规格值组筛选</el-radio>
       </div>
     </div>
 
     <div class="spe-con">
-      <spes v-if="spesGroup && speRadio == '1'" :list-spes="spesList" :goods-index="goodsIndex"></spes>
-      <spe-group v-if="spesVal && speRadio == '2'" :list-group="groupList" :goods-index="goodsIndex"></spe-group>
+      <!-- <spes v-if="spesGroup" :list-spes="spesList" :goods-index="goodsIndex"></spes>
+      <spe-group v-if="spesVal" :list-group="groupList" :goods-index="goodsIndex" @spe-list="speList"></spe-group> -->
+      <spes v-if="spesGroup && speRadio == '1'" :list-spes="spesList" :return-list="returnList" :goods-index="goodsIndex"></spes>
+      <spe-group v-if="spesVal && speRadio == '2'" :list-group="groupList" :return-list="returnList" :goods-index="goodsIndex" @spe-list="speList"></spe-group>
     </div>
     <slot></slot>
   </div>
 </template>
 
 <script>
+import Emitter from './assist/emitter';
 import Spes from './spes';
 import SpeGroup from './spe-group';
 import LoadSelect from './load-select';
 import GicLoadItem from './load-item';
 import { baseUrl } from '@/config/index.js';
-import { log } from '@/utils/index.js';
 export default {
   name: 'goods-specifications',
+
+  mixins: [Emitter],
 
   components: {
     Spes,
@@ -39,7 +43,8 @@ export default {
   },
 
   props: {
-    goodsIndex: Array
+    goodsIndex: Array,
+    listReback: [Array, Object]
   },
 
   data() {
@@ -47,16 +52,24 @@ export default {
       spesGroup: false,
       spesVal: false,
       speOptions: [], // 规格
-      speRadio: '1',
+      speRadio: '2',
       currentPage: 1,
       load: false,
       specvalue: '',
       spesList: [],
+      returnList: [],
       groupList: [] // 规格值 在规格值组里面
     };
   },
 
   methods: {
+    speList(list) {
+      this.dispatch('vue-gic-goods-selector', 'pass-spe-group-list', {
+        index: this.goodsIndex,
+        item: list,
+        type: 'standard'
+      });
+    },
     loadMore() {
       if (this.speOptions.length == (this.currentPage - 1) * 20) {
         this.getOptionsData('success');
@@ -69,7 +82,7 @@ export default {
       const param = {
         type: 'TYP_NORMAL',
         currentPage: this.currentPage,
-        pageSize: 20
+        pageSize: 10000
       };
       this.axios
         .get(`${baseUrl}/api-goods/page-standard?requestProject=goods`, {
@@ -103,6 +116,12 @@ export default {
       if (this.specList && this.specList.standardId) {
         this.validateGoods();
       }
+      this.dispatch('vue-gic-goods-selector', 'pass-standardId', {
+        index: this.goodsIndex,
+        items: {
+          parentId: this.specList.standardId
+        }
+      });
     },
     // 查询是规格值还是规格值组
     validateGoods() {
@@ -128,7 +147,7 @@ export default {
     getSpeGroupData() {
       const param = {
         currentPage: 1,
-        pageSize: 20,
+        pageSize: 10000,
         parentId: this.specList.standardId,
         type: 'TYP_GROUP',
         categoryId: this.specList.gicStandardId
@@ -148,7 +167,7 @@ export default {
           }
         })
         .catch(err => {
-          log(err);
+          console.log(err);
         });
     },
     // 规格值数据
@@ -167,31 +186,30 @@ export default {
             const data = res.data.result;
             if (data.result && data.result.length) {
               const middleData = data.result;
-              this.groupList = middleData.map(el => {
-                if (el.standardGroupNames && el.standardGroupNames.length) {
-                  el.standardGroup = [];
-                  for (let i = 0; i < el.standardGroupNames.length; i++) {
-                    el.standardGroup.push({
-                      valueName: el.standardGroupNames[i],
-                      valueId: el.standardGroupIds[i]
-                    });
-                  }
-                }
-                return el;
-              });
+              this.groupList = middleData;
             } else {
               this.groupList = [];
             }
           }
         })
         .catch(err => {
-          log(err);
+          console.log(err);
         });
     }
   },
 
   mounted() {
-    // this.$on('pass-item', this.resiver);
+    this.$on('pass-item', this.resiver);
+    // 用来回显规格
+    setTimeout(() => {
+      let index = this.speOptions.findIndex(el => el.standardId == this.listReback.parentId);
+      if (index > -1) {
+        this.specvalue = this.speOptions[index].standardName;
+        this.specList = this.speOptions.find(val => val.standardName == this.specvalue);
+        this.returnList = this.listReback.ids;
+        this.validateGoods(this.listReback.parentId);
+      }
+    }, 100);
   },
 
   beforeMount() {
@@ -211,7 +229,7 @@ export default {
     border-top-left-radius: 5px;
   }
   .spe-con {
-    max-height: 285px;
+    max-height: 295px;
     padding: 10px 20px;
     overflow: hidden;
   }

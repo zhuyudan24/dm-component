@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="dm-reset-style">
     <Navigator></Navigator>
     <router-view />
   </div>
@@ -11,6 +11,12 @@ export default {
   name: 'App',
   components: {
     Navigator
+  },
+  created() {
+    console.log('app');
+  },
+  mounted() {
+    console.log(this);
   }
 };
 </script>
@@ -20,4 +26,5 @@ export default {
 @import url('./assets/theme/index.css');
 @import url('./assets/style/style.scss');
 @import url('./assets/style/markdown.scss');
+@import url('../static/css/dmreset.css');
 </style>

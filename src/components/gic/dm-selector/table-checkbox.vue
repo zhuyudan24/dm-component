@@ -2,16 +2,16 @@
   <!-- 表格内部sku筛选的组件 -->
   <div class="sku-checkbox" :class="{ 'sku-white': bgColor }" v-if="skus.length">
     <div class="sku-table">
-      <el-checkbox v-model="allSku" v-if="showCheckBox" :indeterminate="isIndeterminate" @change="handleCheckAllChange"></el-checkbox>
+      <el-checkbox v-model="allSku" v-if="showCurrentCheckBox" :indeterminate="isIndeterminate" @change="handleCheckAllChange"></el-checkbox>
       <span class="sku-attr sku-code">SKU码</span>
       <span class="sku-attr sku-color">颜色</span>
       <span class="sku-attr sku-size">大小</span>
     </div>
     <ul class="sku-lists">
       <li v-for="(sku, i) in skus" :key="i" class="list">
-        <el-checkbox v-if="showCheckBox" v-model="sku.check" @change="handleCheckedSku"></el-checkbox>
+        <el-checkbox v-if="showCurrentCheckBox" v-model="sku.check" @change="handleCheckedSku"></el-checkbox>
         <span class="sku-attr sku-code" :title="sku.skuCode">{{ sku.skuCode }}</span>
-        <span class="sku-color sku-attr">
+        <span class="sku-color sku-attr" :title="sku.color">
           {{ sku.color }}
         </span>
         <span class="sku-size sku-attr">
@@ -50,7 +50,7 @@ export default {
     return {
       skus: [],
       allSku: false,
-      showCheckBox: false,
+      showCurrentCheckBox: false,
       isIndeterminate: false,
       checkedSku: []
     };
@@ -68,15 +68,16 @@ export default {
         check: val
       }));
       this.isIndeterminate = false;
-      this.dispatch('SkuFilterTable', 'passku', {
+      this.dispatch('goods-some', 'pass-sku', {
         skus: this.skus,
-        inx: this.inx
+        inx: this.inx,
+        checkAll: val
       });
     },
     handleCheckedSku() {
       this.handleSkuStatus();
       // 每次勾选sku的时候传到最外层的商品层
-      this.dispatch('SkuFilterTable', 'passku', {
+      this.dispatch('goods-some', 'pass-sku', {
         skus: this.skus,
         inx: this.inx
       });
@@ -84,7 +85,7 @@ export default {
   },
 
   created() {
-    this.showCheckBox = this.showCheckbox;
+    this.showCurrentCheckBox = this.showCheckbox;
     this.bgColor = this.bColor ? this.bColor : '';
   },
 
@@ -98,6 +99,7 @@ export default {
       immediate: true,
       handler(newval) {
         this.skus = newval;
+        this.handleSkuStatus();
       }
     }
   }
@@ -106,16 +108,19 @@ export default {
 
 <style lang="less" scoped>
 .sku-checkbox {
-  padding: 20px 10px 20px 30px;
+  padding: 10px;
   .sku-attr {
     display: inline-block;
     vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     margin: 0 5px;
     line-height: 30px;
     color: #909399;
   }
   .sku-code {
-    width: 140px;
+    width: 130px;
   }
   .sku-color {
     width: 50px;

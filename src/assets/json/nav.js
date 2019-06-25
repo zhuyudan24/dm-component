@@ -1,8 +1,11 @@
 import componentsList from '../../../components.json';
 let gic = componentsList.gic;
 let base = componentsList.base;
+let expansion = componentsList.expansion;
+
 const gicComponentsList = Object.keys(gic).map(v => ({ router: '/gic/' + v + '.' + gic[v].version, key: gic[v].name + '.' + gic[v].version }));
 const baseComponentsList = Object.keys(base).map(v => ({ router: '/base/' + v + '.' + base[v].version, key: base[v].name + '.' + base[v].version }));
+const expansionComponentsList = Object.keys(expansion).map(v => ({ router: '/expansion/' + v + '.' + expansion[v].version, key: expansion[v].name + '.' + expansion[v].version }));
 
 let menuList = [
   {
@@ -38,11 +41,12 @@ let menuList = [
   },
   {
     num: '04',
-    name: '拓展',
+    name: '拓展部分',
     items: []
   }
 ];
 
 menuList[1].items = gicComponentsList;
 menuList[2].items = baseComponentsList;
+menuList[3].items = expansionComponentsList;
 export default menuList;

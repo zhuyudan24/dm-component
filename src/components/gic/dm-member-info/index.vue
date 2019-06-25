@@ -12,13 +12,13 @@
             <div class="fr">
               <img title="已取消关注公众号" v-if="memberInfo.status == 0" src="../../../../static/img/status@gzhcanclegray.png" style="margin-right:5px" />
               <img title="已关注公众号" v-else-if="memberInfo.status == 1" src="../../../../static/img/status@gzh.png" style="margin-right:5px" />
-              <img title="未关注公众号" v-else src="../../../../static/img/status@gzhgray.png" style="margin-right:5px" />
-              <img title="使用过小程序" v-if="memberInfo.usedMiniProgram" src="../../../../static/img/status@xcx.png" style="margin-right:5px" />
-              <img title="未使用小程序" v-else src="../../../../static/img/status@xcxgray.png" style="margin-right:5px" />
-              <img title="已绑定手机号" v-if="memberInfo.bindPhone" src="../../../../static/img/phone_icon.png" style="margin-right:5px" />
-              <img title="未绑定手机号" v-else src="../../../../static/img/phone_icon_gray.png" style="margin-right:5px" />
-              <img title="已认证" v-if="memberInfo.authStatus" src="../../../../static/img/member_icon.png" style="margin-right:5px" />
-              <img title="未认证" v-else src="../../../../static/img/member_icon_gray.png" style="margin-right:5px" />
+              <img title="未关注公众号" v-else-if="memberInfo.status == 2" src="../../../../static/img/status@gzhgray.png" style="margin-right:5px" />
+              <img title="使用过小程序" v-if="memberInfo.wxStatus === 1" src="../../../../static/img/status@xcx.png" style="margin-right:5px" />
+              <img title="未使用小程序" v-if="memberInfo.wxStatus === 0" src="../../../../static/img/status@xcxgray.png" style="margin-right:5px" />
+              <img title="已绑定手机号" v-if="memberInfo.phoneStatus === 1" src="../../../../static/img/phone_icon.png" style="margin-right:5px" />
+              <img title="未绑定手机号" v-if="memberInfo.phoneStatus === 0" src="../../../../static/img/phone_icon_gray.png" style="margin-right:5px" />
+              <img title="已认证" v-if="memberInfo.authStatus === 1" src="../../../../static/img/member_icon.png" style="margin-right:5px" />
+              <img title="未认证" v-if="memberInfo.authStatus === 0" src="../../../../static/img/member_icon_gray.png" style="margin-right:5px" />
             </div>
           </div>
           <p class="member-detal-info">
@@ -37,7 +37,7 @@
               <p>消费次数</p>
             </div>
             <div class="singelinfo-costitem">
-              <p class="no-wrap">{{ memberInfo.lastCostTime || '--' }}</p>
+              <p class="no-wrap">{{ memberInfo.lastCost || 0 }}</p>
               <p>最近消费</p>
             </div>
           </div>
@@ -46,7 +46,7 @@
       <div class="singelinfo-jl">
         <a class="singelinfo-jlitem">消费记录 ({{ memberInfo.numOfSale }})</a>
         <a class="singelinfo-jlitem">营销记录 ({{ memberInfo.numOfmarket }})</a>
-        <a class="singelinfo-jlitem">卡券记录 ({{ memberInfo.numOfCard }})</a>
+        <a class="singelinfo-jlitem">卡券记录 ({{ memberInfo.couponCount }})</a>
       </div>
     </div>
     <div slot="reference" style="width:200px;">

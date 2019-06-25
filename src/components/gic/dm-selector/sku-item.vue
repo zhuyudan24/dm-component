@@ -1,6 +1,6 @@
 <template>
   <li class="sku-item" v-if="popShow">
-    <el-popover placement="bottom" :width="320" trigger="hover">
+    <el-popover placement="bottom" :width="320" trigger="hover" popper-class="damo-popover">
       <div slot="reference">
         <el-checkbox v-model="skuItem.check" @change="handleChange"></el-checkbox>
         <div class="good-img">
@@ -71,7 +71,6 @@ export default {
 .sku-item {
   height: 56px;
   line-height: 56px;
-  padding: 0 10px;
   box-sizing: border-box;
   border-bottom: 1px solid #dcdfe6;
   .good-img {

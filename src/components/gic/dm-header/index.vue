@@ -624,10 +624,11 @@ export default {
               let timer = window.setInterval(() => {
                 that.total--;
                 let h = Math.floor(that.total / 3600) < 10 ? '0' + Math.floor(that.total / 3600) : Math.floor(that.total / 3600);
-                let d = h > 23 ? parseInt(h % 24) : 0;
+                let d = h > 23 ? Math.floor(h / 24) : 0;
                 let m = Math.floor((that.total / 60) % 60) < 10 ? '0' + Math.floor((that.total / 60) % 60) : Math.floor((that.total / 60) % 60);
                 let s = Math.floor(that.total % 60) < 10 ? '0' + Math.floor(that.total % 60) : Math.floor(that.total % 60);
                 if (d > 0) {
+                  console.log(d);
                   h = h > 23 ? h % 24 : h;
                   that.timeValue = '剩余' + d + '天' + h + '小时' + m + '分' + s + '秒';
                 } else {

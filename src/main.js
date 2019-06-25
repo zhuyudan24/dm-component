@@ -4,6 +4,8 @@ import Vue from 'vue';
 import Axios from 'axios';
 import App from './App';
 import router from './router';
+import '../static/font/iconfont.css';
+import '../static/css/reset.css';
 import ElementUI from 'element-ui';
 Vue.config.productionTip = false;
 Vue.prototype.axios = Axios;

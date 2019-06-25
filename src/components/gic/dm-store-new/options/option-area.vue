@@ -1,5 +1,5 @@
 <template>
-  <el-popover class="vertical-baseline" placement="bottom-start" width="406" height="400" trigger="click" v-model="popoverShow">
+  <el-popover class="vertical-baseline" placement="bottom-start" width="430" height="400" trigger="click" v-model="popoverShow">
     <div class="dm-store__area" style="height: 400px;">
       <!-- 左侧 -->
       <div class="dm-store__left">

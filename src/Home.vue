@@ -28,6 +28,9 @@ export default {
     handleSelect() {
       //
     }
+  },
+  created() {
+    console.log('home');
   }
 };
 </script>

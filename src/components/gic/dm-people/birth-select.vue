@@ -203,6 +203,7 @@ export default {
   },
 
   created() {
+    console.log(this.dateval);
     if (this.dateval[0] && this.dateval[1]) {
       this.replay(this.dateval[0], this.dateval[1]);
     }

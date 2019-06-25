@@ -5,19 +5,26 @@
       <load-select v-model="propVal" @scrollload="loadMore" :load="load" @change-load="changeLoad">
         <gic-load-item v-for="item in propOptions" :key="item.propertyId" :value="item.propertyId" :label="item.propertyName" @pass-item="resiver"> </gic-load-item>
       </load-select>
+
       <!-- 多选有 包含其一 和 包含所有-->
-      <el-select v-model="exclude" placeholder="请选择" style="width: 120px" v-if="propType === 'TYP_CHECK'">
-        <el-option v-for="item in excludeOption" :key="item.value" :label="item.label" :value="item.value"></el-option>
-      </el-select>
+      <!-- <el-select v-model="exclude" placeholder="请选择" style="width: 120px" v-if="propType === 'TYP_CHECK'">
+        <el-option
+          v-for="item in excludeOption"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select> -->
     </div>
 
     <div class="prop-content">
       <!-- 单选 属性勾选 TYP_SINGLE -->
+      <!-- v-if="propType === 'TYP_SINGLE' || propType === 'TYP_CHECK'"  -->
       <div v-if="propType === 'TYP_SINGLE' || propType === 'TYP_CHECK'" class="prop-type">
         <el-checkbox :indeterminate="isIndeterminate" v-model="propList.checkAll" @change="handleCheckAllChange">全选</el-checkbox>
         <div class="box-group">
           <el-checkbox-group v-model="checkedSpes" @change="handleCheckedSpesChange">
-            <el-checkbox v-for="spe in spes" :label="spe" :key="spe.propertyId">
+            <el-checkbox v-for="spe in spes" class="dm-checkbox" :label="spe" :key="spe.valueId">
               {{ spe.valueName }}
             </el-checkbox>
           </el-checkbox-group>
@@ -57,6 +64,7 @@
 <script>
 import LoadSelect from './load-select';
 import GicLoadItem from './load-item';
+import Emitter from './assist/emitter';
 import { baseUrl } from '@/config/index.js';
 // 文本 单选 多选 勾选 整数 实数 货币 时间 百分比
 const PROP_TYPE = [
@@ -74,7 +82,12 @@ const PROP_TYPE = [
 export default {
   name: 'goods-properties',
 
-  props: {},
+  mixins: [Emitter],
+
+  props: {
+    goodsIndex: Array,
+    listReback: [Array, Object]
+  },
 
   components: {
     GicLoadItem,
@@ -83,8 +96,6 @@ export default {
 
   data() {
     return {
-      exclude: '',
-      excludeOption: [{ value: 'all', label: '包含所有' }, { value: 'one', label: '包含其一' }],
       propOptions: [],
       propVal: [],
       checkedSpes: [],
@@ -102,6 +113,19 @@ export default {
       }
       // intervalOption: [{ label: '>=', value: 0 }, { label: '<=', value: 1 }, { label: '=', value: 2 }]
     };
+  },
+
+  watch: {
+    checkedSpes(newval) {
+      this.dispatch('vue-gic-goods-selector', 'pass-property', {
+        index: this.goodsIndex,
+        items: {
+          propId: newval,
+          parentId: this.propertyId,
+          condition: this.exclude
+        }
+      });
+    }
   },
 
   methods: {
@@ -143,6 +167,13 @@ export default {
             if (suc == 'success') {
               this.load = true;
             }
+            // 回显
+            if (this.listReback.ids.parentId) {
+              let index = this.propOptions.findIndex(el => el.propertyId == this.listReback.ids.parentId);
+              if (index > -1) {
+                this.resiver(this.propOptions[index].propertyName);
+              }
+            }
           } else {
             // this.$message.error(res.data.message);
           }
@@ -155,16 +186,16 @@ export default {
     resiver(val) {
       this.propVal = val;
       const item = this.propOptions.find(el => el.propertyName === val);
+      this.propertyId = item.propertyId;
       // propertyType 字段属性类型
       const type = PROP_TYPE.find(type => type === item.propertyType);
-      console.log(type, 'type');
       // 属性类型
       if (type) {
         this.propType = type;
         if (this.propType == 'TYP_SINGLE' || this.propType == 'TYP_CHECK') {
           const param = {
             currentPage: 1,
-            pageSize: 20,
+            pageSize: 10000,
             propertyId: item.propertyId
           };
           this.axios
@@ -175,10 +206,22 @@ export default {
               if (res.data.errorCode == 0) {
                 const data = res.data.result;
                 if (data.result && data.result.length) {
-                  console.log(data.result);
                   this.spes = data.result;
                 } else {
                   this.spes = [];
+                }
+                // 回显内部属性
+                const List = this.listReback.ids.propId;
+                if (List && List.length) {
+                  List.forEach(el => {
+                    let i = this.spes.findIndex(item => item.valueId == el.valueId);
+                    if (i > -1) {
+                      this.checkedSpes.push(this.spes[i]);
+                    }
+                  });
+                  let checkedCount = this.checkedSpes.length;
+                  this.propList.checkAll = checkedCount === this.spes.length;
+                  this.isIndeterminate = checkedCount > 0 && checkedCount < this.spes.length;
                 }
               }
             })

@@ -475,11 +475,10 @@
   Popper.prototype._getBoundaries = function(data, padding, boundariesElement) {
     // NOTE: 1 DOM access here
     var boundaries = {};
-    var width;
-    var height;
+    var width, height;
     if (boundariesElement === 'window') {
-      var body = root.document.body;
-      var html = root.document.documentElement;
+      var body = root.document.body,
+        html = root.document.documentElement;
 
       height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
       width = Math.max(body.scrollWidth, body.offsetWidth, html.clientWidth, html.scrollWidth, html.offsetWidth);
@@ -928,8 +927,8 @@
    */
   function getOuterSizes(element) {
     // NOTE: 1 DOM access here
-    var _display = element.style.display;
-    var _visibility = element.style.visibility;
+    var _display = element.style.display,
+      _visibility = element.style.visibility;
     element.style.display = 'block';
     element.style.visibility = 'hidden';
     var calcWidthToForceRepaint = element.offsetWidth;
@@ -983,8 +982,8 @@
    * @returns index or null
    */
   function getArrayKeyIndex(arr, keyToFind) {
-    var i = 0;
-    var key;
+    var i = 0,
+      key;
     for (key in arr) {
       if (arr[key] === keyToFind) {
         return i;

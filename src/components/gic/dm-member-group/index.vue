@@ -2,7 +2,16 @@
   <div class="group-set-transfer">
     <div class="flex-1 table-container select-list">
       <div class="input-div">
-        <el-input class="w_100" placeholder="请输入关键字搜索分组" prefix-icon="el-icon-search" v-model="dataSearch" @keyup.enter.native="searchEnterFun" clearable @clear="clearSearch('dataSearch')"> </el-input>
+        <el-input class="w-220" placeholder="请输入关键字搜索分组" prefix-icon="el-icon-search" v-model="dataSearch" @keyup.enter.native="searchEnterFun" clearable @clear="clearSearch('dataSearch')"> </el-input>
+        <el-select class="w-100" placeholder="请选择" v-model="select.selectedItem" @change="selectChange">
+          <el-option v-for="item in select.selectList" :key="item.memberTagGroupClassifyId" :label="item.classifyName" :value="item.memberTagGroupClassifyId"></el-option>
+        </el-select>
+        <div style="float: right">
+          <a :href="createGroupLink">
+            <el-button type="primary">新增分组</el-button>
+          </a>
+          <el-button @click="refreshTable">刷新列表</el-button>
+        </div>
       </div>
       <el-table @row-click="selectRow" v-loading="loading" v-loadmore="loadmore" ref="originTable" :data="tableData" tooltip-effect="dark" @selection-change="handleSelectionChange" :height="height - 72">
         <el-table-column type="selection" width="55"> </el-table-column>
@@ -49,7 +58,7 @@
     </div>
     <div class="selected-list table-container">
       <div class="input-div">
-        <el-input class="w_100" placeholder="请输入关键字搜索分组" prefix-icon="el-icon-search" v-model="dataSearchSelected" clearable @clear="clearSearch('dataSearchSelected')"> </el-input>
+        <el-input placeholder="请输入关键字搜索分组" prefix-icon="el-icon-search" v-model="dataSearchSelected" clearable @clear="clearSearch('dataSearchSelected')"> </el-input>
       </div>
       <el-table ref="selectedTable" @row-click="selectRowToMove" :data="selectedData" @selection-change="handleSelectedSelectionChange" :height="height - 114">
         <el-table-column type="selection" width="55"> </el-table-column>
@@ -100,6 +109,11 @@ export default {
   },
   data() {
     return {
+      // 下拉列表相关的数据
+      select: {
+        selectList: [],
+        selectedItem: ''
+      },
       tableData: [],
       pageSize: 20,
       currentPage: 1,
@@ -113,7 +127,8 @@ export default {
       canClick: false,
       countOfCoverTotal: 0,
       totalPage: 1,
-      loading: false
+      loading: false,
+      createGroupLink: ''
     };
   },
   directives: {
@@ -168,6 +183,37 @@ export default {
       this.$refs.selectedTable.toggleRowSelection(row);
     },
 
+    // 刷新表格
+    refreshTable() {
+      this.currentPage = 1;
+      this.tableData = [];
+      this.getGroupList();
+    },
+    // 获取分类
+    getClassList() {
+      this.axios
+        .get(`${this.baseUrl}/gic-member-tag-web/member-tag-group-classify/list?requestProject=gic-member-tag-web`)
+        .then(res => {
+          let { errorCode, message, result } = res.data;
+          if (errorCode === 1) {
+            if (result.length > 0) {
+              this.select.selectList = result;
+              this.select.selectedItem = result[0].memberTagGroupClassifyId;
+            }
+            return;
+          }
+          this.$message.error({
+            duration: 1000,
+            message
+          });
+        })
+        .catch(err => {
+          this.$message.error({
+            duration: 1000,
+            message: err.message
+          });
+        });
+    },
     /**
      * 获取分组列表数据
      */
@@ -175,7 +221,7 @@ export default {
       const that = this;
       that.loading = true;
       that.axios
-        .get(`${that.baseUrl}/gic-member-tag-web/member-tag-group/findList.json?requestProject=${that.projectName}&pageSize=${that.pageSize}&pageNum=${that.currentPage}&groupName=${that.dataSearch}&effectiveStatus=${that.effectiveStatus}`)
+        .get(`${that.baseUrl}/gic-member-tag-web/member-tag-group/findList.json?requestProject=${that.projectName}&pageSize=${that.pageSize}&pageNum=${that.currentPage}&groupName=${that.dataSearch}&effectiveStatus=${that.effectiveStatus}&memberTagGroupClassifyId=${that.select.selectedItem}`)
         .then(res => {
           log(res, 'group list');
           if (res.data.errorCode == 1) {
@@ -199,8 +245,17 @@ export default {
         });
     },
 
-    searchEnterFun() {
+    selectChange() {
+      this.currentPage = 1;
+      this.dataSearch = '';
       this.tableData = [];
+      this.getGroupList();
+    },
+    searchEnterFun() {
+      const { selectList } = this.select;
+      this.currentPage = 1;
+      this.tableData = [];
+      this.select.selectedItem = selectList.length > 0 ? selectList[0].memberTagGroupClassifyId : '';
       this.getGroupList();
     },
 
@@ -336,7 +391,9 @@ export default {
   },
   mounted() {
     log(this.defaltSelected, 'defaltSelected');
+    this.createGroupLink = `${window.location.origin}/member-tag/#/memberGroupEdit`;
     this.getGroupList();
+    this.getClassList();
     if (this.defaltSelected.length > 0) {
       this.selectedData = this.uniqueByGroupId(this.selectedData.concat(this.defaltSelected)); // 数组拼接并去重
       this.staticSelectedData = [].concat(JSON.parse(JSON.stringify(this.selectedData)));
@@ -354,7 +411,7 @@ export default {
 .group-set-transfer {
   display: flex;
   width: 100%;
-  min-width: 712px;
+  min-width: 1160px;
   background: #fff;
   padding: 10px 30px 20px;
   box-sizing: border-box;
@@ -367,8 +424,11 @@ export default {
     -ms-flex: 1;
     flex: 1;
   }
-  .w_100 {
-    width: 100%;
+  .w-220 {
+    width: 220px;
+  }
+  .w-100 {
+    width: 100px;
   }
   .m-b-26 {
     margin-bottom: 26px;

@@ -6,7 +6,7 @@
       <span class="good-info">
         商品信息
       </span>
-      <el-popover placement="bottom" width="280" trigger="click" v-model="showPopPrice">
+      <el-popover placement="bottom" width="300" trigger="hover" v-model="showPopPrice">
         <el-input placeholder="最低单价" :minlength="1" :maxlength="6" style="width: 90px;" v-model="lowPrice"></el-input>
         —
         <el-input placeholder="最高单价" :minlength="1" :maxlength="6" style="width: 90px;" v-model="mostPrice"></el-input>
@@ -17,7 +17,7 @@
           <i class="icon iconfont icon-shaixuan-shi icon-filter"></i>
         </span>
       </el-popover>
-      <el-popover placement="bottom" width="280" trigger="click" v-model="showPopNum">
+      <el-popover placement="bottom" width="300" trigger="hover" v-model="showPopNum">
         <el-input placeholder="最低数量" :minlength="1" :maxlength="6" style="width: 90px;" v-model="lowStore"></el-input>
         —
         <el-input placeholder="最高数量" :minlength="1" :maxlength="6" style="width: 90px;" v-model="mostStore"></el-input>
@@ -30,7 +30,7 @@
       </el-popover>
     </div>
 
-    <ul class="goods-sku-lists">
+    <ul class="goods-sku-lists" @scroll="scrollEvent($event)">
       <sku-left-item v-for="(item, i) in items" :key="i" :goods="item" :inx="i" :check="skuFlt" :checkbox.sync="item.check" @changeIndeterminate="handleIndeter"></sku-left-item>
       <span class="el-table__empty-text no-data" v-if="!items || !items.length">暂无数据</span>
     </ul>
@@ -40,7 +40,6 @@
 <script>
 import SkuLeftItem from './sku-left-item';
 import { throttle } from './assist/util';
-import { log } from '@/utils/index.js';
 // 正则
 const INTEGER_REG = /^[1-9]{1}[0-9]{0,5}$/; // 最小1 最大999999 的整数
 
@@ -69,11 +68,26 @@ export default {
       showPopPrice: false,
       showPopNum: false,
       isIndeterminate: false,
+      loadDone: false,
       checkedGoods: [] // 选中的商品
     };
   },
 
   methods: {
+    scrollEvent(event) {
+      const ele = event.target;
+      // scrollHeight 获取元素内容高度
+      // scrollTop 可以获取或者设置元素的偏移值
+      // 满足滚到底部和上次加载结束两个条件
+      if (ele.scrollHeight - ele.scrollTop == 303 && !this.loadDone) {
+        // 滚到底部 先加载
+        this.loadDone = true;
+        setTimeout(_ => {
+          this.$emit('scrollload');
+          this.loadDone = false;
+        }, 50);
+      }
+    },
     // 处理最低的库存
     handleLowStore() {
       // 占位
@@ -83,16 +97,34 @@ export default {
       // 占位
     },
     // item 是勾选的sku信息
-    resiverSku() {
-      this.$emit('resiverSku');
+    resiverSku(val) {
+      // val里面有个check
+      if (val.checkAll === true) {
+        this.$emit('resiverAllSku', {
+          skus: val.skus,
+          inx: val.inx
+        });
+      } else {
+        this.$emit('resiverSku');
+      }
     },
     // 单价搜索
     searchGoods() {
       // 占位
+      this.$emit('search-store', {
+        regionName: 'PRICE',
+        lowerLimit: this.lowPrice,
+        upperLimit: this.mostPrice
+      });
     },
     // 库存搜索
     storeSearch() {
       // 占位
+      this.$emit('search-store', {
+        regionName: 'STOCK',
+        lowerLimit: this.lowStore,
+        upperLimit: this.mostStore
+      });
     },
     handleCheckAllChange(val) {
       this.items = this.items.map(el => ({
@@ -104,7 +136,6 @@ export default {
     },
     // 修改checkbox的状态
     handleIndeter() {
-      log(this.items);
       this.checkedGoods = this.items.filter(el => el.check);
       this.checkAll = this.checkedGoods.length === this.items.length;
       this.isIndeterminate = this.checkedGoods.length > 0 && this.checkedGoods.length < this.items.length;
@@ -165,7 +196,6 @@ export default {
   .title {
     height: 44px;
     line-height: 44px;
-    padding: 0 10px;
     font-size: 14px;
     background-color: #f5f7fa;
     border-top-right-radius: 5px;

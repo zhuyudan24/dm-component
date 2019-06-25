@@ -1,5 +1,6 @@
 <template>
   <li class="sku-left-item">
+    <!-- 这里是商品的结构 如果有sku的筛选 就会展示箭头 默认不展示sku的选择 -->
     <div class="goods-box" :class="{ expands: expands }">
       <div class="gic-icon">
         <el-checkbox v-model="skuItem.check" @change="handleChange" v-if="!checked"></el-checkbox>
@@ -31,7 +32,6 @@ import ElCollapseTransition from './collapse-transition';
 import TableCheckbox from './table-checkbox';
 import Emitter from './assist/emitter';
 import { baseUrl } from '@/config/index.js';
-import { log } from '@/utils/index.js';
 export default {
   name: 'sku-left-item',
   mixins: [Emitter],
@@ -60,11 +60,11 @@ export default {
     },
     // 接收 sku筛选的时候传过来的值
     resiverSku(item) {
-      log(item);
+      this.dispatch('');
     },
     getSkuList() {
       this.axios
-        .get(`${baseUrl}/api-goods/list-store-goods-select-sku?goodsId=${this.skuItem.goodsId}`)
+        .get(`${baseUrl}/api-goods/list-store-goods-select-sku?requestProject=goods&goodsId=${this.skuItem.goodsId}`)
         .then(res => {
           if (res.data.errorCode === 0) {
             const data = res.data.result;
@@ -81,17 +81,16 @@ export default {
                 // 当前商品左边的商品
                 if (data.length) {
                   const currentGoods = data.find(ele => this.skuItem.goodsId === ele.goodsId);
-                  // 找到存在的sku 然后切换状态
-                  currentGoods.skus.forEach(sku => {
-                    for (let i = 0; i < this.skuItem.skus.length; i++) {
-                      if (this.skuItem.skus[i].skuId === sku.skuId) {
-                        this.skuItem.skus[i].check = true;
-                        break;
-                      }
+                  if (currentGoods && currentGoods.skus && currentGoods.skus.length) {
+                    // 找到存在的sku 然后切换状态
+                    // 把 currentGoods的值 赋 给this.skuItem.skus
+                    for (let i = 0; i < currentGoods.skus.length; i++) {
+                      this.skuItem.skus[i].check = currentGoods.skus[i].check;
                     }
-                  });
-                  // 主动切换sku的状态
-                  this.broadcast('table-checkbox', 'changeSkuStatus');
+                    // 主动切换sku的状态
+                    this.broadcast('table-checkbox', 'changeSkuStatus');
+                    this.dispatch('goods-some', 'changeSkuData', data);
+                  }
                 }
               }
             } else {
@@ -100,7 +99,7 @@ export default {
           }
         })
         .catch(err => {
-          //
+          console.log(err);
         });
     },
     parseAttr(attr = '') {
@@ -126,6 +125,7 @@ export default {
     goods: {
       immediate: true,
       handler(newval) {
+        console.log(newval);
         this.skuItem = newval;
       }
     },
@@ -153,7 +153,8 @@ export default {
     width: 16px;
     height: 56px;
     line-height: 56px;
-    padding: 0 10px;
+    padding-right: 20px;
+    box-sizing: content-box;
   }
   .good-img {
     display: inline-block;
@@ -176,6 +177,7 @@ export default {
         height: 16px;
         line-height: 16px;
         margin: 4px 0;
+        font-size: 12px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -189,12 +191,12 @@ export default {
   .good-item {
     display: inline-block;
     vertical-align: middle;
-    text-align: center;
     width: 60px;
   }
   .goods-box {
     .icon-trans {
       padding: 4px;
+      padding-left: 10px;
       transition: all 0.3s;
     }
   }

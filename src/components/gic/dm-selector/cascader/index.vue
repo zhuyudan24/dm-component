@@ -1,7 +1,7 @@
 <template>
   <transition name="transition-drop">
     <div class="gic-caspanel">
-      <Caspanel :data="data" ref="caspanel" :change-on-select="changeOnSelect"> </Caspanel>
+      <Caspanel :data="data" ref="caspanel" :middle="middle" :change-on-select="changeOnSelect"> </Caspanel>
     </div>
   </transition>
 </template>
@@ -18,6 +18,12 @@ export default {
 
   props: {
     data: {
+      type: Array,
+      default() {
+        return [];
+      }
+    },
+    middle: {
       type: Array,
       default() {
         return [];

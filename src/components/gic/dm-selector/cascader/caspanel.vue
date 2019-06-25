@@ -1,15 +1,14 @@
 <template>
   <div class="caspanel-box">
     <span class="ate-keys-box">
-      <el-input placeholder="搜索关键字" prefix-icon="el-icon-search" v-model="keys"> </el-input>
+      <el-input placeholder="搜索关键字" prefix-icon="el-icon-search" v-model="keys" @keyup.native.enter="handleEnter($event)"> </el-input>
     </span>
     <div class="casitem-box">
       <ul v-if="data && data.length" class="casitem-ul">
         <Casitem v-for="(item, i) in data" :key="i" :data="item" :tmp-item="tmpItem" @click.native.stop="handleClickItem(item)" @dblclick.native.stop="handleDbClickItem(item)"> </Casitem>
       </ul>
     </div>
-
-    <Caspanel v-if="sublist && sublist.length" :data="sublist" :change-on-select="changeOnSelect"></Caspanel>
+    <Caspanel v-if="sublist && sublist.length" :data="sublist" :middle="sublist" :change-on-select="changeOnSelect"></Caspanel>
   </div>
 </template>
 
@@ -17,7 +16,6 @@
 import Casitem from './casitem';
 import Emitter from '../assist/emitter';
 import { baseUrl } from '@/config/index.js';
-import { log } from '@/utils/index.js';
 let key = 1;
 
 export default {
@@ -36,6 +34,12 @@ export default {
         return [];
       }
     },
+    middle: {
+      type: Array,
+      default() {
+        return [];
+      }
+    },
     changeOnSelect: Boolean
   },
 
@@ -49,6 +53,11 @@ export default {
   },
 
   methods: {
+    //
+    handleEnter(eve) {
+      let value = eve.target.value;
+      this.data = this.middle.filter(el => el.categoryName.indexOf(value) > -1);
+    },
     handleClickItem(item) {
       this.tmpItem = Object.assign({}, item);
       this.getNextData(item.categoryId);
@@ -74,11 +83,12 @@ export default {
           type: 'warning'
         });
       } else {
-        this.dispatch('vue-gic-selector', 'handle-ategory', tags);
+        this.dispatch('vue-gic-goods-selector', 'handle-ategory', tags);
       }
     },
     // 查找下级
     getNextData(id) {
+      this.sublist = [];
       this.axios
         .get(`${baseUrl}/api-mall/list-mall-goods-children-category?requestProject=mall&categoryId=${id}`)
         .then(res => {
@@ -94,7 +104,7 @@ export default {
           }
         })
         .catch(err => {
-          log(err);
+          console.log(err);
         });
     },
     getKey() {
@@ -120,6 +130,7 @@ export default {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     background-color: #f5f7fa;
+    box-sizing: content-box;
   }
   .casitem-box {
     position: absolute;

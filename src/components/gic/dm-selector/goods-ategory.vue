@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="ate-group">
-      <Cascader :data="ateData"></Cascader>
+      <Cascader :data="ateData" :middle="middle"></Cascader>
     </div>
     <slot></slot>
   </div>
@@ -20,7 +20,6 @@
 <script>
 import Cascader from './cascader';
 import { baseUrl } from '@/config/index.js';
-import { log } from '@/utils/index.js';
 export default {
   name: 'goods-ategory',
 
@@ -39,7 +38,8 @@ export default {
 
   data() {
     return {
-      ateData: [{}]
+      ateData: [{}],
+      middle: [{}]
     };
   },
 
@@ -52,13 +52,15 @@ export default {
             const data = res.data.result;
             if (data && data.length) {
               this.ateData = data;
+              this.middle = data;
+              console.log(this.middle);
             }
           } else {
             // 占位
           }
         })
         .catch(err => {
-          log(err);
+          console.log(err);
         });
     },
     handleClose(tag) {
@@ -84,6 +86,8 @@ export default {
     height: 48px;
     line-height: 48px;
     background-color: #ebeef5;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
     overflow: hidden;
   }
   .ategory-lists {

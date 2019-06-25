@@ -2,8 +2,8 @@
   <div class="collection">
     <div class="coll-options" v-if="goodIndex[1] <= 3">
       <el-radio-group v-model="bindCondition" @change="handleChange">
-        <el-radio :disabled="disabled" :label="0">并且</el-radio>
-        <el-radio :disabled="disabled" :label="1">或者</el-radio>
+        <el-radio :disabled="disabled" :label="1">并且</el-radio>
+        <el-radio :disabled="disabled" :label="0">或者</el-radio>
         <el-radio :disabled="disabled" :label="2">剔除</el-radio>
       </el-radio-group>
     </div>
@@ -19,8 +19,8 @@
           <el-radio :label="5" class="pop-goodlist">部分商品</el-radio>
         </el-radio-group>
         <div class="insert-dir">
-          <el-button type="text" @click="insertUpward">上方插入</el-button>
-          <el-button type="text" @click="insertUpdown">下方插入</el-button>
+          <el-button type="text" class="btn-selector" @click="insertUpward">上方插入</el-button>
+          <el-button type="text" class="btn-selector" @click="insertUpdown">下方插入</el-button>
         </div>
         <el-button type="text" class="button-txt" slot="reference" :disabled="length == 5">插入条件</el-button>
       </el-popover>
@@ -57,17 +57,20 @@ export default {
   methods: {
     deleteCondition() {
       // 触发selector 组件去删除
-      this.dispatch('vue-gic-selector', 'delete-gooditem', this.goodIndex);
+      this.dispatch('vue-gic-goods-selector', 'delete-gooditem', {
+        index: this.goodIndex,
+        status: 'delete'
+      });
     },
     handleChange(val) {
-      this.dispatch('vue-gic-selector', 'pass-radioGroup', { index: this.goodIndex, val: this.bindCondition });
+      this.dispatch('vue-gic-goods-selector', 'pass-radioGroup', { index: this.goodIndex, val: this.bindCondition });
     },
     insertUpward() {
-      this.dispatch('vue-gic-selector', 'insert-uselector', { index: this.goodIndex, type: parseInt(this.goodOption, 10) });
+      this.dispatch('vue-gic-goods-selector', 'insert-uselector', { index: this.goodIndex, type: parseInt(this.goodOption, 10) });
       this.visiable = false;
     },
     insertUpdown() {
-      this.dispatch('vue-gic-selector', 'insert-dselector', { index: this.goodIndex, type: parseInt(this.goodOption, 10) });
+      this.dispatch('vue-gic-goods-selector', 'insert-dselector', { index: this.goodIndex, type: parseInt(this.goodOption, 10) });
       this.visiable = false;
     }
   },
@@ -85,11 +88,9 @@ export default {
 
 <style lang="less" scoped>
 .collection {
-  margin-top: 10px;
   margin-left: 20px;
   margin-right: 20px;
   padding-top: 10px;
-  border-top: 1px dashed #dcdfe6;
   display: flex;
   justify-content: space-between;
   .coll-options {
@@ -120,5 +121,10 @@ export default {
   &:hover {
     color: #1890ff;
   }
+}
+.btn-selector {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0;
 }
 </style>

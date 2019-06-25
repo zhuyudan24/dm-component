@@ -42,7 +42,7 @@
                         <!-- && !childCell.widgetName -->
                         <div class="gic-select-wrap inline-block" :key="ind" v-if="childCell.templateCode == 'com001' && !childCell.widgetName">
                           <div class="gic-select">
-                            <el-select v-model="childCell.levelModel" class="temp-select" placeholder="请选择" @focus="selectFocus(index, key, ind)" @change="tempChange(index, key, ind)">
+                            <el-select v-model="childCell.levelModel" class="temp-select" placeholder="请选择" @focus="selectFocus(index, key, ind)" @change="tempChange(index, key, ind, $event)">
                               <el-option v-for="item in childCell.levelOptions" :label="item.value" :key="item.key" :value="item.key"></el-option>
                             </el-select>
                           </div>
@@ -320,7 +320,7 @@ export default {
   methods: {
     // 接收生日时间范围值
     changeGicSelectValue(i, j, k) {
-      this.conditionsList[i].children[j].columnValue = this.conditionsList[i].children[j].children[1].levelModel.toString();
+      this.conditionsList[i].children[j].columnValue = this.conditionsList[i].children[j].children[2].levelModel.toString();
     },
     // 过滤回显数据
     filterPassValue(data = []) {
@@ -364,8 +364,20 @@ export default {
     },
     // 选择方法后,获取下级数据,追加到当行数据
     tempChange(index, key, order) {
+      // 生日类型 农历 阳历
+      let birthType = [...arguments][3];
       if (this.conditionsList[index].children[key].children[1]) {
         this.conditionsList[index].children[key].children[1].storeFlag = false;
+      }
+      const birthData = this.conditionsList[index].children;
+      if (birthData[key].columnKey == 'birthdayMD' || birthData[key].columnKey == 'lunarBirthdayMD') {
+        this.conditionsList[index].children[key].columnKey = birthData[key].children[1].levelModel == 'yangli' ? 'birthdayMD' : 'lunarBirthdayMD';
+        if (['nongli', 'yangli'].indexOf(birthType) > -1) {
+          if (this.conditionsList[index].children[key].children[2]) {
+            this.conditionsList[index].children[key].children[2].levelModel = birthData.columnKey;
+          }
+          return;
+        }
       }
       // 请求参数
       let parentChainId = this.conditionsList[index].children[key].children[order].esScreeningWidgetChainId;
@@ -449,7 +461,6 @@ export default {
             }
             // 计算属性+字段属性
             if (data.property == 3) {
-              // "property" : "8", //属性:1、计算属性(>,=), 2、字段属性(搜索字段名称)，4、值属性，8、不是属性  可以两两组合(比如，有事计算属性又是值属性，就是5
               this.conditionsList[this.andIndex].children[this.orIndex].computeCharacter = data.computeCharacter;
               this.conditionsList[this.andIndex].children[this.orIndex].columnKey = data.columnKey;
               this.conditionsList[this.andIndex].children[this.orIndex].columnValue = '';
@@ -476,13 +487,13 @@ export default {
             this.addNextData(resData.result, widgetFieldKey, indexObj);
             return;
           }
-          this.$message.error({
+          this.$message.warning({
             duration: 1000,
             message: resData.message
           });
         })
         .catch(error => {
-          this.$message.error({
+          this.$message.warning({
             duration: 1000,
             message: error.message
           });
@@ -961,6 +972,13 @@ export default {
         this.$nextTick(_ => {
           this.conditionDetailShow = false;
           this.conditionsShow = true;
+          this.conditionsList.forEach(con => {
+            con.children.forEach(child => {
+              if (child.columnKey == 'birthdayMD' || child.columnKey == 'lunarBirthdayMD') {
+                child.children[2].levelModel = child.columnValue.split(',');
+              }
+            });
+          });
           if (this.conditionsList.length) {
             this.$emit('editShow');
           } else {
@@ -1046,7 +1064,7 @@ export default {
                 innerObj.data.dealKey = el.dealKey;
               }
               // 生日
-              if (el.columnKey == 'birthday' || el.columnKey == 'birthdayMD') {
+              if (el.columnKey == 'lunarBirthdayMD' || el.columnKey == 'birthdayMD') {
                 if (parseInt(el.columnValue.split(',')[0]) > parseInt(el.columnValue.split(',')[1])) {
                   birthFlag = false;
                 }
@@ -1377,6 +1395,7 @@ export default {
             let list = List[i].children[j].children[k];
             // 如果不是 200就判断levelmodel
             if (list.templateCode != 'com020') {
+              console.log(list);
               // 如果是数组判断长度
               if (Array.isArray(list.levelModel) && !list.levelModel.length) {
                 return false;
