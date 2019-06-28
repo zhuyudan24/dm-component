@@ -265,7 +265,7 @@ export default {
         pageSize: 20
       };
       this.axios
-        .get(`${baseUrl}/api-goods/list-store-goods-select`, {
+        .get(`${baseUrl}/api-goods/list-store-goods-select?requestProject=goods`, {
           params: param
         })
         .then(res => {

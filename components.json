@@ -9,6 +9,16 @@
       "version": "1.0.1",
       "name": "拖拽表格",
       "adminName" : "石瑶"
+    },
+    "dialog" : {
+      "version": "1.0.2",
+      "name": "对话框",
+      "adminName" : "石瑶"
+    },
+    "table2": {
+      "version": "1.0.3",
+      "name": "表格",
+      "adminName" : "石瑶"
     }
   },
   "gic": {
@@ -73,7 +83,7 @@
       "adminName" : "朱玉丹"
     },
     "member-group": {
-      "version": "2.1.1",
+      "version": "2.2.1",
       "name": "会员分组",
       "adminName" : "岳和青"
     },
@@ -103,7 +113,7 @@
       "adminName" : "岳和青"
     },
     "selector": {
-      "version": "1.1.79",
+      "version": "1.1.80",
       "name": "商品选择器",
       "adminName" : "石瑶"
     },
@@ -132,11 +142,6 @@
     "form-item": {
       "version": "2.0.00",
       "name": "表单Item带提示",
-      "adminName" : "石瑶"
-    },
-    "datepicker": {
-      "version": "2.0.00",
-      "name": "日历年月",
       "adminName" : "石瑶"
     },
     "table": {

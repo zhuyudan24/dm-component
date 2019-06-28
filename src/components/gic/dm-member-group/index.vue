@@ -7,7 +7,7 @@
           <el-option v-for="item in select.selectList" :key="item.memberTagGroupClassifyId" :label="item.classifyName" :value="item.memberTagGroupClassifyId"></el-option>
         </el-select>
         <div style="float: right">
-          <a :href="createGroupLink">
+          <a :href="createGroupLink" target="_blank">
             <el-button type="primary">新增分组</el-button>
           </a>
           <el-button @click="refreshTable">刷新列表</el-button>
@@ -29,12 +29,7 @@
         </el-table-column>
         <el-table-column v-if="headerList.indexOf('updateType') > -1" label="更新频率" min-width="100px">
           <template slot-scope="scope">
-            <template v-if="scope.row.isRealTime == 0">
-              {{ (scope.row.updateType, scope.row.updateDay | formatUpdateFrequency) }}
-            </template>
-            <template v-else>
-              --
-            </template>
+            {{ scope.row | formatUpdateFrequency }}
           </template>
         </el-table-column>
         <el-table-column v-if="headerList.indexOf('effectiveStatus') > -1" prop="state" label="状态" min-width="60px">
@@ -70,8 +65,10 @@
         </el-table-column>
       </el-table>
       <p class="cover-count">
-        已选中<span class="count">{{ countOfCoverTotal }}</span
-        >人
+        <span class="count">共计 {{ countOfCoverTotal }} 人</span>
+        <span class="count" v-if="selectedCount.limit !== Number.MAX_VALUE">
+          已选中 <span>{{ selectedCount.count }}/{{ selectedCount.limit }}</span>
+        </span>
       </p>
     </div>
   </div>
@@ -79,6 +76,7 @@
 <script>
 import { baseUrl } from '@/config/index.js';
 import { log } from '@/utils/index.js';
+
 export default {
   name: 'vue-gic-member-group',
   props: {
@@ -105,6 +103,9 @@ export default {
     effectiveStatus: {
       type: [String, Number],
       default: 1
+    },
+    maxLimit: {
+      type: Number
     }
   },
   data() {
@@ -120,6 +121,11 @@ export default {
       dataSearch: '',
       baseUrl,
       dataSearchSelected: '',
+      // 穿梭框已选数据的条数和最大限制
+      selectedCount: {
+        limit: 0,
+        count: 0
+      },
       selectedData: [], // 穿梭窗已选入数据
       staticSelectedData: [],
       selectionToTransfer: [], // 穿梭窗选入数据
@@ -277,7 +283,13 @@ export default {
     },
 
     selectToTransfer() {
-      this.selectedData = this.uniqueByGroupId(this.selectedData.concat(this.selectionToTransfer)); // 数组拼接并去重
+      let selectedData = this.uniqueByGroupId(this.selectedData.concat(this.selectionToTransfer)); // 数组拼接并去重
+      if (selectedData.length > this.selectedCount.limit) {
+        this.$message.error('选中的分组不能超过分组上限！');
+        return;
+      }
+      this.selectedData = selectedData;
+      this.selectedCount.count = selectedData.length;
       this.staticSelectedData = [].concat(JSON.parse(JSON.stringify(this.selectedData)));
       this.getMemberCountByGroups();
       this.$emit('handleDataTransferred', this.selectedData, this.selectionToTransfer);
@@ -314,6 +326,7 @@ export default {
       let aSet = new Set(seleced);
       let bSet = new Set(setection);
       that.selectedData = seleced.concat(setection).filter(v => !aSet.has(v) || !bSet.has(v)); // 两数组非交集部分即为剔除后剩下的数据
+      that.selectedCount.count = that.selectedData.length;
       let arr = that.staticSelectedData.slice(0);
       arr.forEach((father, idx) => {
         setection.forEach(son => {
@@ -372,18 +385,19 @@ export default {
       const reg = /\d{1,3}(?=(\d{3})+$)/g;
       return (data + '').replace(reg, '$&,');
     },
-    formatUpdateFrequency(type, day) {
-      switch (type) {
+    formatUpdateFrequency(row) {
+      if (row.isRealTime !== 0) {
+        return '--';
+      }
+      const { updateType, updateDay } = row;
+      switch (updateType) {
         case 1:
           return '每天一次';
-          break;
         case 2:
           let weekArr = ['一', '二', '三', '四', '五', '六', '日'];
-          return day ? `每周${weekArr[day - 1]}` : '每周一次';
-          break;
+          return updateDay ? `每周${weekArr[updateDay - 1]}` : '每周一次';
         case 3:
-          return day ? `每月${day}号` : '每月一次';
-          break;
+          return updateDay ? `每月${updateDay}号` : '每月一次';
         default:
           return '--';
       }
@@ -395,14 +409,35 @@ export default {
     this.getGroupList();
     this.getClassList();
     if (this.defaltSelected.length > 0) {
-      this.selectedData = this.uniqueByGroupId(this.selectedData.concat(this.defaltSelected)); // 数组拼接并去重
-      this.staticSelectedData = [].concat(JSON.parse(JSON.stringify(this.selectedData)));
+      let selectedData = this.uniqueByGroupId(this.selectedData.concat(this.defaltSelected)); // 数组拼接并去重
+      if (selectedData.length <= this.selectedCount.limit) {
+        this.selectedData = selectedData;
+        this.selectedCount.count = selectedData.length;
+        this.staticSelectedData = [].concat(JSON.parse(JSON.stringify(this.selectedData)));
+      } else {
+        throw new Error('dm-member-group组件的props的defaltSelected.length属性不能大于props的maxLimit');
+      }
     }
     this.getMemberCountByGroups();
   },
   watch: {
     dataSearchSelected(now, old) {
       this.searchSelectedByKey(now);
+    },
+    maxLimit: {
+      immediate: true,
+      handler(now) {
+        if (now === undefined) {
+          this.selectedCount.limit = Number.MAX_VALUE;
+          return;
+        }
+        now = parseInt(now);
+        if (now <= 0) {
+          this.selectedCount.limit = Number.MAX_VALUE;
+          throw new Error('dm-member-group组件的props的maxLimit属性必须大于0');
+        }
+        this.selectedCount.limit = now;
+      }
     }
   }
 };
@@ -458,8 +493,18 @@ export default {
       color: #7e8c8d;
       font-size: 14px;
       .count {
-        color: #606266;
-        margin: 0 5px;
+        padding-right: 10px;
+        margin-right: 5px;
+        color: #909399;
+        border-right: 1px solid #dcdfe6;
+        span {
+          color: #303133;
+        }
+        &:last-child {
+          padding-right: 0;
+          margin-right: 0;
+          border-right: none;
+        }
       }
     }
   }

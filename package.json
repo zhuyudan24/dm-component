@@ -15,9 +15,11 @@
   },
   "dependencies": {
     "@riophae/vue-treeselect": "0.0.38",
+    "antd": "^3.19.6",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "dropzone": "^5.5.1",
+    "element-ui": "^2.9.2",
     "freedomen": "^1.1.5",
     "highlight.js": "^9.13.1",
     "raf": "^3.4.1",

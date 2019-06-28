@@ -132,3 +132,27 @@
     transform: scale(0.6);
   }
 }
+
+.damo-table-animation {
+  -webkit-animation: dialog-fade-in 0.5s;
+          animation: dialog-fade-in 0.5s;
+}
+@keyframes dialog-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(30px);
+    opacity: 1;
+  }    
+}
+
+@-webkit-keyframes dialog-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(-30px);
+    opacity: 1;
+  }    
+}

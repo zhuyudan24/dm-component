@@ -1,7 +1,7 @@
 <template>
   <layout>
     <template slot="component">
-      <dm-member-group :defaltSelected="defaltSelected" :height="height" :projectName="projectName" :headerList="headerList" :effectiveStatus="effectiveStatus" @handleDataTransferred="handleDataTransferred" @handleDataLeft="handleDataLeft"> </dm-member-group>
+      <dm-member-group :defaltSelected="defaltSelected" :height="height" :projectName="projectName" :headerList="headerList" :effectiveStatus="effectiveStatus" :max-limit="maxLimit" @handleDataTransferred="handleDataTransferred" @handleDataLeft="handleDataLeft"> </dm-member-group>
     </template>
     <template slot="data">
       {{ data }}
@@ -53,7 +53,8 @@ export default {
       height: 543, // 穿梭窗高度， 默认是543
       projectName: 'memberTag', // 默认是memberTag
       headerList: ['isRealTime', 'latestUpdateTime', 'updateType', 'effectiveStatus', 'effectiveDate'], // 表头配置，默认全部，分组名称默认显示不可配置
-      effectiveStatus: 1 // 不传： 所有状态 1： 有效 0： 失效
+      effectiveStatus: 1, // 不传： 所有状态 1： 有效 0： 失效
+      maxLimit: 10
     };
   },
 

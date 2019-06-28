@@ -1,63 +1,7 @@
+## 弹出框控制弹出的样式
 
-/**
- 按钮微动
-**/
-[ant-click-animating],
-[ant-click-animating-without-extra-node] {
-  position: relative;
-}
-[ant-click-animating-without-extra-node]:after,
-.ant-click-animating-node {
-  content: '';
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  bottom: -1px;
-  right: -1px;
-  border-radius: inherit;
-  border: 0 solid #1890ff;
-  opacity: 0.2;
-  -webkit-animation: fadeEffect 2s cubic-bezier(0.08, 0.82, 0.17, 1), waveEffect 0.4s cubic-bezier(0.08, 0.82, 0.17, 1);
-          animation: fadeEffect 2s cubic-bezier(0.08, 0.82, 0.17, 1), waveEffect 0.4s cubic-bezier(0.08, 0.82, 0.17, 1);
-  -webkit-animation-fill-mode: forwards;
-          animation-fill-mode: forwards;
-  display: block;
-  pointer-events: none;
-}
-@-webkit-keyframes waveEffect {
-  100% {
-    top: -6px;
-    left: -6px;
-    bottom: -6px;
-    right: -6px;
-    border-width: 6px;
-  }
-}
-@keyframes waveEffect {
-  100% {
-    top: -6px;
-    left: -6px;
-    bottom: -6px;
-    right: -6px;
-    border-width: 6px;
-  }
-}
-@-webkit-keyframes fadeEffect {
-  100% {
-    opacity: 0;
-  }
-}
-@keyframes fadeEffect {
-  100% {
-    opacity: 0;
-  }
-}
-
-.el-input__inner:focus{
-  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
-  border-right-width: 1px !important;
-}
-
+**修改如下**
+```css
 .dialog-fade-enter-active {
   -webkit-animation: dialog-fade-in .3s;
           animation: dialog-fade-in .3s;
@@ -132,3 +76,4 @@
     transform: scale(0.6);
   }
 }
+```

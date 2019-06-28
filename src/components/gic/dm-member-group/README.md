@@ -6,6 +6,7 @@
   :projectName="projectName"
   :headerList='headerList'
   :effectiveStatus="effectiveStatus"
+  :max-limit="maxLimit"
   @handleDataTransferred="handleDataTransferred"
   @handleDataLeft="handleDataLeft">
 </vue-gic-member-group>
@@ -37,7 +38,8 @@ data() {
     height： 200, // 穿梭窗高度， 默认是543
     projectName： 'memberTag', // 默认是memberTag
     headerList: ['isRealTime', 'latestUpdateTime', 'updateType', 'effectiveStatus', 'effectiveDate'] // 表头配置，默认全部，分组名称默认显示不可配置
-    effectiveStatus: 1 // 不传： 所有状态 1： 有效 0： 失效
+    effectiveStatus: 1, // 不传： 所有状态 1： 有效 0： 失效
+    maxLimit: 10
   }
 }
 
@@ -67,5 +69,13 @@ methods: {
 
 
 ### 更新记录
-2.0.01 2019/2/28
+#### 2.2.1 2019/5/27
+1. 添加配置可选分组上限限制的功能
+
+#### 2.1.1 2019/5/23
+1. 增加下拉列表选择分组的功能
+2. 增加刷新会员列表的功能
+3. 增加新建会员分组的按钮，点击跳转到新建会员分组页面
+
+#### 2.0.01 2019/2/28
 1. 处理了去重问题
